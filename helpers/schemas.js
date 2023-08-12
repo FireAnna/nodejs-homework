@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const emailRegexp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// схемы Joi для контактов
+// схемы Joi для контактів
 const addContactsSchema = Joi.object({
   name: Joi.string().min(2).required(),
   email: Joi.string().email().required(),
@@ -15,7 +15,7 @@ const patchContactsFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-// схема mongoose для контактов
+// схема mongoose для контактів
 const contactSchema = new Schema(
   {
     name: {
@@ -41,13 +41,18 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// схемы Joi для пользователей
+// схеми Joi для користувачів 
 const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
   email: Joi.string().pattern(emailRegexp).required(),
 });
 
-// схема mongoose для пользователей
+// схеми Joi для email користувачів 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
+// схема mongoose для користувачів 
 
 const userSchema = new Schema(
   {
@@ -72,12 +77,21 @@ const userSchema = new Schema(
       default: "",
     },
     avatarURL: String,
+     verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 module.exports = {
   addContactsSchema,
+  emailSchema,
   patchContactsFavoriteSchema,
   contactSchema,
   userSchema,
